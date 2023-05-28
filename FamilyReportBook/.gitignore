@@ -1,4 +1,4 @@
 bin/
 obj/
 .idea/
-reportbook.db
+reportbook.db*

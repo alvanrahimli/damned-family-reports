@@ -1,0 +1,69 @@
+@page "/Users"
+@using FamilyReportBook.Models
+@model FamilyReportBook.Pages.UsersPage
+
+@{
+    Layout = "Shared/_Layout";
+    var i = 1;
+}
+
+<h2>Ailə üzvləri</h2>
+
+<div class="accordion mb-2" id="add-member-accordion">
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#add-member-collapse" aria-expanded="false" aria-controls="add-member-collapse">
+                Yeni ailə üzvü üçün tıqla
+            </button>
+        </h2>
+        <div id="add-member-collapse" class="accordion-collapse collapse" data-bs-parent="#add-member-accordion">
+            <div class="accordion-body">
+                <form method="post">
+                    <div class="row">
+                        <div class="col-md-2 col-xs-12">
+                            <div class="mb-3">
+                                <label for="member-role" class="form-label">Üzv rolu</label>
+                                <select class="form-select" aria-label="Member role selector" required="required" asp-for="NewUser.Role">
+                                    <option selected>Rol seç</option>
+                                    <option value="@FamilyRole.Mother">Ana</option>
+                                    <option value="@FamilyRole.Father">Ata</option>
+                                    <option value="@FamilyRole.Son">Oğul</option>
+                                    <option value="@FamilyRole.Doughter">Qız</option>
+                                    <option value="@FamilyRole.Grandma">Nənə</option>
+                                    <option value="@FamilyRole.Grandpa">Baba</option>
+                                    <option value="@FamilyRole.Outsider">Başqası</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-10 col-xs-12">
+                            <div class="mb-3">
+                                <label for="member-name" class="form-label">Ailə üzvü adı</label>
+                                <input type="text" class="form-control" id="member-name" asp-for="NewUser.Name">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" asp-page-handler="CreateUser">Yadda saxla</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Üzvün rolu</th>
+        <th>Adı</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var user in Model.Users)
+    {
+        <tr>
+            <th>@(i++)</th>
+            <td>@user.FamilyRole.TranslateTo("az")</td>
+            <td>@user.Name</td>
+        </tr>
+    }
+    </tbody>
+</table>

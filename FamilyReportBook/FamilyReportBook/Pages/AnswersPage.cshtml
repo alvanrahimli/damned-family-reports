@@ -1,0 +1,82 @@
+@page "/Topics/{TopicId:int}/Answers"
+@model FamilyReportBook.Pages.AnswersPage
+
+@{
+    Layout = "Shared/_Layout";
+    var i = 1;
+}
+
+<div class="accordion mb-2" id="add-answer-accordion">
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#add-answer-collapse" aria-expanded="false" aria-controls="add-answer-collapse">
+                Cavab əlavə et
+            </button>
+        </h2>
+        <div id="add-answer-collapse" class="accordion-collapse collapse" data-bs-parent="#add-answer-accordion">
+            <div class="accordion-body">
+                <form method="post">
+                    <div class="row">
+                        <div class="col-md-2 col-xs-12">
+                            <div class="mb-3">
+                                <label for="answer-author" class="form-label">Müəllif</label>
+                                <select id="answer-author" class="form-select" aria-label="Author selector" required="required" asp-for="NewAnswer.UserId">
+                                    <option selected>Müəllif seç</option>
+                                    @foreach (var user in Model.Users)
+                                    {
+                                        <option value="@user.Id">@user.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-xs-12">
+                            <div class="mb-3">
+                                <label for="answered-to-author" class="form-label">Kimə deyirsiniz?</label>
+                                <select id="answered-to-author" class="form-select" aria-label="Author selector" required="required" asp-for="NewAnswer.AnsweredToUserId">
+                                    <option selected>Üzv seç</option>
+                                    @foreach (var user in Model.Users)
+                                    {
+                                        <option value="@user.Id">@user.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-xs-12">
+                            <div class="mb-3">
+                                <label for="answer-content" class="form-label">Cavab mətni</label>
+                                <input type="text" class="form-control" id="answer-content" aria-describedby="answer-content-helper" asp-for="NewAnswer.Text">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" value="@Model.TopicId" asp-for="NewAnswer.TopicId">
+                    <button type="submit" class="btn btn-primary" asp-page-handler="CreateAnswer">Əlavə et</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Cavab</th>
+        <th>Kimdən</th>
+        <th>Kimə</th>
+        <th>Tarix</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var answer in Model.Answers)
+    {
+        <tr>
+            <td>@(i++)</td>
+            <td>@answer.Text</td>
+            <td>@answer.User.Name</td>
+            <td>@answer.AnsweredToUser.Name</td>
+            <td>@answer.Timestamp.ToLocalTime().ToString("dd MMM yyyy, HH:mm")</td>
+        </tr>
+    }
+    </tbody>
+</table>

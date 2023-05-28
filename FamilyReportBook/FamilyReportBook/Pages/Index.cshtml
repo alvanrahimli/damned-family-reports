@@ -1,10 +1,89 @@
 ﻿@page
+@using FamilyReportBook.Models
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
+    var i = 1;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<h2>Mövzular</h2>
+<div class="accordion mb-2" id="add-topic-accordion">
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#add-topic-collapse" aria-expanded="false" aria-controls="add-topic-collapse">
+                Yeni mövzu üçün tıqla
+            </button>
+        </h2>
+        <div id="add-topic-collapse" class="accordion-collapse collapse" data-bs-parent="#add-topic-accordion">
+            <div class="accordion-body">
+                <form method="post">
+                    <div class="row">
+                        <div class="col-md-2 col-xs-12">
+                            <div class="mb-3">
+                                <label for="topic-author" class="form-label">Müəllif</label>
+                                <select id="topic-author" class="form-select" aria-label="Author selector" required="required" asp-for="NewTopic.UserId">
+                                    <option selected>Müəllif seç</option>
+                                    @foreach (var user in Model.Users)
+                                    {
+                                        <option value="@user.Id">@user.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-10 col-xs-12">
+                            <div class="mb-3">
+                                <label for="topic-header" class="form-label">Başlıq</label>
+                                <input type="text" class="form-control" id="topic-header" aria-describedby="topic-header-helper" asp-for="NewTopic.Title">
+                                <div id="topic-header-helper" class="form-text">Mövzuya başlıq yazın</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-xs-12">
+                            <div class="mb-3">
+                                <label for="topic-answer-to" class="form-label">Cavabı verdiyin üzv</label>
+                                <select id="topic-answer-to" class="form-select" aria-label="Author selector" required="required" asp-for="NewTopic.AnsweredTo">
+                                    <option selected>Üzv seç</option>
+                                    @foreach (var user in Model.Users)
+                                    {
+                                        <option value="@user.Id">@user.Name</option>
+                                    }
+                                </select>
+                            </div>                            
+                        </div>
+                        <div class="col-md-10 col-xs-12">
+                            <div class="mb-3">
+                                <label for="topic-answer" class="form-label">Sənin verdiyin cavab</label>
+                                <textarea class="form-control" id="topic-answer" rows="3" asp-for="NewTopic.Answer"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" asp-page-handler="CreateTopic">Yadda saxla</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+<table class="table">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Başlıq</th>
+        <th>Yeniləndi</th>
+        <th>Keçidlər</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var topic in Model.Topics)
+    {
+        <tr>
+            <th>@(i++)</th>
+            <td>@topic.Title</td>
+            <td>@topic.LastModified.ToLocalTime().ToString("D")</td>
+            <td>
+                <a href="@($"/Topics/{topic.Id}/Answers")" class="btn btn-link">Cavablar</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

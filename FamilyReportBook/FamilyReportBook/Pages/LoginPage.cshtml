@@ -1,0 +1,29 @@
+@page
+@model FamilyReportBook.Pages.LoginPage
+
+@{
+    Layout = "Shared/_Layout";
+}
+
+<form method="post">
+    <div class="mb-3">
+        <label for="name-input" class="form-label">Üzv adı</label>
+        <select class="form-select" aria-label="Üzv adı seçimi" id="name-input" asp-for="Login.UserId">
+            <option selected>Seçin</option>
+            @foreach (var user in Model.Users)
+            {
+                <option value="@user.Id">@user.Name</option>
+            }
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Şifrə</label>
+        <input type="password" class="form-control" id="password" asp-for="Login.Password">
+    </div>
+    <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="remember-me" asp-for="Login.RememberMe">
+        <label class="form-check-label" for="remember-me">Məni yadda saxla</label>
+    </div>
+    
+    <button type="submit" class="btn btn-primary" asp-page-handler="Login">Giriş et</button>
+</form>
